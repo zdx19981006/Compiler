@@ -5,8 +5,8 @@ using namespace std;
 char Filename[30];  //文件名
 FILE *fpin;   //声明一个函数指针
 char ch,prog[1000],token[8];
-char *keyword[8]={"if","then","else","repeat","until","read","write"};
-int p=0,symbol=0;
+char *keyword[8]={(char*)"if",(char*)"then",(char*)"else",(char*)"end",(char*)"repeat",(char*)"until",(char*)"read",(char*)"write"};
+int p=0,symbol=0,n;
 /*  symbol表
     0->  字母  -> 1 -> 其他 -> 2
          if   -> 3
@@ -26,9 +26,8 @@ int p=0,symbol=0;
          < -> 18
          ; -> 19
 */
-void GetToken(char* prog)   //词法分析
+void GetToken()   //词法分析
 {
-    int n;
     for(n=0;n<8;n++){
         token[n]='\0';
     }
@@ -88,6 +87,10 @@ int main(void){
     cout<<"请输入源文件名：";
     for(;;){
         cin>>Filename;
+        int temp=0;
+        while(Filename[temp]!='\0'){
+            temp++;
+        }  
         if((fpin=fopen(Filename,"r"))!=NULL)
             break;
         else 
@@ -100,14 +103,20 @@ int main(void){
         prog[p++]=ch;
     }while(ch!=EOF);
 
+    
+    ofstream outFile;
+    outFile.open("C:\\Users\\45312\\Documents\\lex.txt");
+
     p=0;  
     do{
-        GetToken(prog);   //词法分析
+        GetToken();   //词法分析
         switch(symbol)
         {
             case -1:
             case -2:break;
-            default:cout<<"("<<symbol<<","<<token<<")"<<endl;  break;
+            default:outFile<<"("<<symbol<<","<<token<<")"<<endl;  break;
         }
     }while(ch!=EOF);
+
+    return 0;
 }
