@@ -33,6 +33,7 @@ void GetToken()   //词法分析
     }
     n=0;
     ch=prog[p++];
+
     while(ch==' '||ch=='\n'||ch=='\t'){ch=prog[p++];}  //跳过空格，换行符，制表符
     if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')){
         symbol=1;
@@ -40,7 +41,8 @@ void GetToken()   //词法分析
             token[n++]=ch;
             ch=prog[p++];
         }while((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z'));
-
+        int temp=0;
+        
         symbol=2;
         for(n=0;n<8;n++){
             if(strcmp(token,keyword[n])==0){  //判断token是否为保留字
@@ -77,14 +79,14 @@ void GetToken()   //词法分析
             case '=':symbol=17;token[0]=ch;break;
             case '<':symbol=18;token[0]=ch;break;
             case ';':symbol=19;token[0]=ch;break;
-            default: symbol=-2;cout<<"词法分析出错，请检查是否输入非法字符！\n";break;
+            // default: symbol=-2;cout<<"Error!\n";break;
         }
     }
 }
 
 int main(void){
     /*读入文件*/
-    cout<<"请输入源文件名：";
+    cout<<"Please input Filename:";
     for(;;){
         cin>>Filename;
         int temp=0;
@@ -94,7 +96,7 @@ int main(void){
         if((fpin=fopen(Filename,"r"))!=NULL)
             break;
         else 
-            cout<<"文件路径错误！请重新输入源文件名：";
+            cout<<"Filename Error! Repeat:";
     }
     /*将文件内容存入字符串prog*/
     p=0;
@@ -114,7 +116,11 @@ int main(void){
         {
             case -1:
             case -2:break;
-            default:outFile<<"("<<symbol<<","<<token<<")"<<endl;  break;
+            default:{
+                outFile<<"("<<symbol<<","<<token<<")"<<endl;
+                cout<<"("<<symbol<<","<<token<<")"<<endl;  
+                break;
+            }
         }
     }while(ch!=EOF);
 
